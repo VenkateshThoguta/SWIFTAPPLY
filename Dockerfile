@@ -1,5 +1,8 @@
 FROM ghcr.io/puppeteer/puppeteer:23.7.0
 
+# Switch to root to install additional packages
+USER root
+
 # Set environment variables
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
     PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
@@ -22,6 +25,9 @@ RUN apt-get update && apt-get install -y \
     xdg-utils \
     libxshmfence1 \
     && rm -rf /var/lib/apt/lists/*
+
+# Switch back to non-root user
+USER pptruser
 
 WORKDIR /usr/src/app
 COPY package*.json ./
